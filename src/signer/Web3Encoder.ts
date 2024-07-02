@@ -18,7 +18,7 @@ export class Web3Encoder
 			{
 				if ( ! obj )
 				{
-					return reject( `invalid obj` );
+					return reject( `Web3Encoder.encode :: invalid obj` );
 				}
 
 				let keysToRemove : Array<string> = [ 'sig', 'hash', 'createdAt', 'updatedAt' ];

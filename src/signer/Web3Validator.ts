@@ -22,15 +22,15 @@ export class Web3Validator
 			{
 				if ( ! _.isString( signerWalletAddress ) || _.isEmpty( signerWalletAddress ) )
 				{
-					return reject( `invalid signerWalletAddress` );
+					return reject( `Web3Validator.validateObject :: invalid signerWalletAddress` );
 				}
 				if ( ! _.isObject( obj ) || null === obj )
 				{
-					return reject( `invalid obj` );
+					return reject( `Web3Validator.validateObject :: invalid obj` );
 				}
 				if ( ! _.isString( sig ) || _.isEmpty( sig ) )
 				{
-					return reject( `invalid sig` );
+					return reject( `Web3Validator.validateObject :: invalid sig` );
 				}
 
 				//	...
@@ -60,15 +60,15 @@ export class Web3Validator
 			{
 				if ( ! _.isString( signerWalletAddress ) || _.isEmpty( signerWalletAddress ) )
 				{
-					return reject( `invalid signerWalletAddress` );
+					return reject( `Web3Validator.validateMessage :: invalid signerWalletAddress` );
 				}
 				if ( ! message )
 				{
-					return reject( `invalid message` );
+					return reject( `Web3Validator.validateMessage :: invalid message` );
 				}
 				if ( ! _.isString( sig ) || _.isEmpty( sig ) )
 				{
-					return reject( `invalid sig` );
+					return reject( `Web3Validator.validateMessage :: invalid sig` );
 				}
 
 				//	ether verify

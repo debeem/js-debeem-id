@@ -23,15 +23,15 @@ export class Web3Signer
 			{
 				if ( ! privateKey )
 				{
-					return reject( `invalid privateKey` );
+					return reject( `Web3Signer.signObject :: invalid privateKey` );
 				}
 				if ( ! obj )
 				{
-					return reject( `invalid obj` );
+					return reject( `Web3Signer.signObject :: invalid obj` );
 				}
 				if ( ! EtherWallet.isValidAddress( obj.wallet ) )
 				{
-					return reject( `invalid obj.wallet` );
+					return reject( `Web3Signer.signObject :: invalid obj.wallet` );
 				}
 
 				const message : string = await Web3Encoder.encode( obj, exceptedKeys );
@@ -61,11 +61,11 @@ export class Web3Signer
 			{
 				if ( ! privateKey )
 				{
-					return reject( `invalid privateKey` );
+					return reject( `Web3Signer.signMessage :: invalid privateKey` );
 				}
 				if ( ! message )
 				{
-					return reject( `invalid message` );
+					return reject( `Web3Signer.signMessage :: invalid message` );
 				}
 
 				const signWallet = new ethers.Wallet( privateKey );

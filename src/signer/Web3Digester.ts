@@ -21,15 +21,15 @@ export class Web3Digester
 			{
 				if ( ! obj )
 				{
-					return reject( `invalid obj` );
+					return reject( `Web3Digester.hashObject :: invalid obj` );
 				}
 				if ( ! EtherWallet.isValidAddress( obj.wallet ) )
 				{
-					return reject( `invalid obj.wallet` );
+					return reject( `Web3Digester.hashObject :: invalid obj.wallet` );
 				}
 				if ( ! _.isNumber( obj.timestamp ) || obj.timestamp <= 0 )
 				{
-					return reject( `invalid obj.timestamp` );
+					return reject( `Web3Digester.hashObject :: invalid obj.timestamp` );
 				}
 
 				const message : string = await Web3Encoder.encode( obj, exceptedKeys );

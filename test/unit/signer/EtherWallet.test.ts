@@ -93,7 +93,7 @@ describe( "EtherWallet", () =>
 				// Assert that the error is thrown
 				expect( error ).toBeDefined();
 				expect( error ).toHaveProperty( 'message' );
-				expect( error.message ).toEqual( "invalid mnemonic" );
+				expect( error.message ).toEqual( "EtherWallet.createWalletFromMnemonic :: invalid mnemonic" );
 			}
 		} );
 	} );
@@ -158,7 +158,7 @@ describe( "EtherWallet", () =>
 				// Assert that the error is thrown
 				expect( error ).toBeDefined();
 				expect( error ).toHaveProperty( 'message' );
-				expect( error.message ).toEqual( "invalid format of private key" );
+				expect( error.message ).toEqual( "EtherWallet.createWalletFromPrivateKey :: invalid format of private key" );
 			}
 		} );
 	} );
@@ -220,7 +220,7 @@ describe( "EtherWallet", () =>
 				//	Assert that the error is thrown
 				expect( err ).toBeDefined();
 				expect( err ).toHaveProperty( 'message' );
-				expect( err.message ).toEqual( "invalid address" );
+				expect( err.message ).toEqual( "EtherWallet.createWalletFromAddress :: invalid address" );
 			}
 		});
 

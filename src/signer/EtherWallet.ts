@@ -45,7 +45,7 @@ export class EtherWallet
 	{
 		if ( null === walletItem )
 		{
-			throw new Error( `invalid walletItem` );
+			throw new Error( `EtherWallet.createWalletObject :: invalid walletItem` );
 		}
 
 		let walletObject = null;
@@ -55,7 +55,7 @@ export class EtherWallet
 			const mnemonicObj = ethers.Mnemonic.fromPhrase( walletItem.mnemonic );
 			if ( ! mnemonicObj || ! mnemonicObj.phrase )
 			{
-				throw new Error( `failed to create mnemonic object` );
+				throw new Error( `EtherWallet.createWalletObject :: failed to create mnemonic object` );
 			}
 
 			walletObject = ethers.HDNodeWallet.fromMnemonic( mnemonicObj );
@@ -73,7 +73,7 @@ export class EtherWallet
 			}
 			catch ( error )
 			{
-				throw new Error( 'invalid format of private key' );
+				throw new Error( 'EtherWallet.createWalletObject :: invalid format of private key' );
 			}
 
 			walletObject = new ethers.Wallet( privateKeyObj );
@@ -105,7 +105,7 @@ export class EtherWallet
 		{
 			if ( ! ethers.Mnemonic.isValidMnemonic( mnemonic ) )
 			{
-				throw new Error( 'invalid mnemonic' );
+				throw new Error( 'EtherWallet.createWalletFromMnemonic :: invalid mnemonic' );
 			}
 
 			mnemonicObj = ethers.Mnemonic.fromPhrase( mnemonic )
@@ -113,7 +113,7 @@ export class EtherWallet
 		}
 		if ( ! mnemonicObj || ! mnemonicObj.phrase )
 		{
-			throw new Error( `failed to create mnemonic object` );
+			throw new Error( `EtherWallet.createWalletFromMnemonic :: failed to create mnemonic object` );
 		}
 
 		const walletObj = ethers.HDNodeWallet.fromMnemonic( mnemonicObj )
@@ -145,7 +145,7 @@ export class EtherWallet
 			{
 				if ( ! isKeystoreJson( keystoreJson ) )
 				{
-					return reject( `invalid keystoreJson` );
+					return reject( `EtherWallet.createWalletFromKeystore :: invalid keystoreJson` );
 				}
 
 				const progressCallback : ProgressCallback = ( _percent: number ) =>
@@ -160,13 +160,13 @@ export class EtherWallet
 				const keystoreAccount : KeystoreAccount = await decryptKeystoreJson( keystoreJson, password, progressCallback );
 				if ( ! keystoreAccount )
 				{
-					return reject( `error in decryptKeystoreJson` );
+					return reject( `EtherWallet.createWalletFromKeystore :: error in decryptKeystoreJson` );
 				}
 
 				const wallet : TWalletBaseItem = this.createWalletFromPrivateKey( keystoreAccount.privateKey );
 				if ( ! this.isValidWalletFactoryData( wallet ) )
 				{
-					return reject( `error in createWalletFromPrivateKey` );
+					return reject( `EtherWallet.createWalletFromKeystore :: error in createWalletFromPrivateKey` );
 				}
 
 				resolve( wallet );
@@ -192,15 +192,15 @@ export class EtherWallet
 			{
 				if ( ! this.isValidWalletFactoryData( wallet ) )
 				{
-					return reject( `invalid wallet` );
+					return reject( `EtherWallet.getKeystoreOfWallet :: invalid wallet` );
 				}
 				if ( ! _.isString( wallet.address ) || _.isEmpty( wallet.address ) )
 				{
-					return reject( `invalid wallet.address` );
+					return reject( `EtherWallet.getKeystoreOfWallet :: invalid wallet.address` );
 				}
 				if ( ! _.isString( wallet.privateKey ) || _.isEmpty( wallet.privateKey ) )
 				{
-					return reject( `invalid wallet.privateKey` );
+					return reject( `EtherWallet.getKeystoreOfWallet :: invalid wallet.privateKey` );
 				}
 
 				const account : KeystoreAccount = {
@@ -244,7 +244,7 @@ export class EtherWallet
 	{
 		if ( !extendedKey )
 		{
-			throw new Error( 'no extended private key specified.' );
+			throw new Error( 'EtherWallet.createWalletFromExtendedKey :: no extended private key specified.' );
 		}
 
 		const walletObj = ethers.HDNodeWallet.fromExtendedKey( extendedKey )
@@ -296,7 +296,7 @@ export class EtherWallet
 				};
 				break
 			default:
-				throw new Error( 'Unsupported type of extended private key' );
+				throw new Error( 'EtherWallet.createWalletFromExtendedKey :: Unsupported type of extended private key' );
 		}
 
 		return this.decorateResult( wallet );
@@ -328,7 +328,7 @@ export class EtherWallet
 		}
 		catch ( error )
 		{
-			throw new Error( 'invalid format of private key' )
+			throw new Error( 'EtherWallet.createWalletFromPrivateKey :: invalid format of private key' )
 		}
 
 		//
@@ -362,7 +362,7 @@ export class EtherWallet
 	{
 		if ( ! this.isValidAddress( address ) )
 		{
-			throw new Error( 'invalid address' )
+			throw new Error( 'EtherWallet.createWalletFromAddress :: invalid address' )
 		}
 
 		return this.decorateResult({
@@ -460,7 +460,7 @@ export class EtherWallet
 	{
 		if ( ! walletItem )
 		{
-			throw new Error( `invalid walletItem` );
+			throw new Error( `EtherWallet.decorateResult :: invalid walletItem` );
 		}
 
 		return {
