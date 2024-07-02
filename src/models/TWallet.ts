@@ -66,11 +66,34 @@ export interface TWalletBaseItem
 
 export interface TWalletItem extends TWalletBaseItem
 {
+	/**
+	 * 	the wallet name
+	 */
 	name: string;
-	chainId : number;		//	network changed to chainId
-//	network: string;
-	pinCode: string;		//	password for encrypting local database storage
-	remark?: string;		//	remark
-	avatar?: string;		//	wallet avatar
-	freePayment ?: boolean;		//
+
+	/**
+	 * 	chainId/network
+	 */
+	chainId : number;
+
+	/**
+	 * 	the PIN code
+	 * 	password for encrypting the local database storage
+	 */
+	pinCode: string;
+
+	/**
+	 * 	remark text
+	 */
+	remark?: string;
+
+	/**
+	 * 	wallet avatar
+	 */
+	avatar?: string;
+
+	/**
+	 *	Pay freely
+	 */
+	freePayment ?: boolean;
 }
