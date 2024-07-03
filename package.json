@@ -1,6 +1,6 @@
 {
 	"name": "debeem-id",
-	"version": "1.0.19",
+	"version": "1.0.20",
 	"description": "User identification system based on web3 technology",
 	"main": "dist/index.js",
 	"browser": "dist/index.js",

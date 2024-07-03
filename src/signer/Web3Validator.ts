@@ -73,6 +73,12 @@ export class Web3Validator
 
 				//	ether verify
 				const verifyResult : string = verifyMessage( message, sig );
+				if ( ! _.isString( verifyResult ) || _.isEmpty( verifyResult ) )
+				{
+					return resolve( false );
+				}
+
+				//	...
 				const isSignatureValid = verifyResult.trim().toLowerCase() === signerWalletAddress.trim().toLowerCase();
 
 				// console.log( `signerWalletAddress : `, signerWalletAddress );
