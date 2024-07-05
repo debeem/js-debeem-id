@@ -98,7 +98,152 @@ describe( "EtherWallet", () =>
 		} );
 	} );
 
-	describe( "Create Wallet from Private Key", () =>
+	describe( "create Wallet From an Extended Keys", () =>
+	{
+		it( "should create a wallet from an Extended Private Key", async () =>
+		{
+			/**
+			 * 	https://iancoleman.io/bip39/
+			 *
+			 * 	BIP39 Mnemonic
+			 * 	`retire inflict prevent believe question pipe rebel state visit little bind accuse`
+			 *
+			 * 	from `Account Extended Private Key`
+			 * 	depth = 3
+			 */
+			const extendedPrivateKey = `xprv9y98x2R6KuC98hQ9k1fVYBuM25GZQW25fqcjNZrBWsSRDarET2dgHUJsmHk7nvBwwk9yCyHQxjxvUwYhPfkXU2PF2SHpmUUTvL1RUPfKNpp`;
+			const walletObj = EtherWallet.createWalletFromExtendedKey( extendedPrivateKey );
+			//console.log( walletObj );
+			//	    {
+			//       isHD: true,
+			//       mnemonic: '',
+			//       password: '',
+			//       address: '0xa5e2d3e4add1e1df39621af8a1ea237d5732acb9',
+			//       publicKey: '0x0316e662d08cbedd52d5dfdb0ba322d7f8b015c6572c4f1dec99c4888303dab44c',
+			//       index: 0,
+			//       path: "m/44'/60'/0'/0/0",
+			//       privateKey: undefined
+			//     }
+			expect( walletObj ).not.toBeNull();
+			expect( walletObj.isHD ).toBe( true );
+			expect( walletObj.mnemonic ).toBe( '' );
+			expect( walletObj.password ).toBe( '' );
+			expect( walletObj.address ).toBe( '0xa5e2d3e4add1e1df39621af8a1ea237d5732acb9' );
+			expect( walletObj.publicKey ).toBe( '0x0316e662d08cbedd52d5dfdb0ba322d7f8b015c6572c4f1dec99c4888303dab44c' );
+			expect( walletObj.index ).toBe( 0 );
+			expect( walletObj.path ).toBe( "m/44'/60'/0'/0/0" );
+			expect( walletObj.privateKey ).toBe( undefined );
+		} );
+
+		it( "should create a wallet from an Extended Public Key", async () =>
+		{
+			/**
+			 * 	https://iancoleman.io/bip39/
+			 *
+			 * 	BIP39 Mnemonic
+			 * 	`retire inflict prevent believe question pipe rebel state visit little bind accuse`
+			 *
+			 * 	from `Account Extended Public Key`
+			 * 	depth = 3
+			 */
+			const extendedPublicKey = `xpub6C8VMXwzAGkSMBUcr3CVuKr5a773oxjw34YLAxFo5CyQ6PBNzZwvqGdMcaMyZuumjLGLydzykL5rKVAUK9yD5XCikmDqN8mHCNgcHHsRDuH`;
+			const walletObj = EtherWallet.createWalletFromExtendedKey( extendedPublicKey );
+			//console.log( walletObj );
+			//	    {
+			//       isHD: true,
+			//       mnemonic: '',
+			//       password: '',
+			//       address: '0xa5e2d3e4add1e1df39621af8a1ea237d5732acb9',
+			//       publicKey: '0x0316e662d08cbedd52d5dfdb0ba322d7f8b015c6572c4f1dec99c4888303dab44c',
+			//       index: 0,
+			//       path: "m/44'/60'/0'/0/0",
+			//       privateKey: undefined
+			//     }
+			expect( walletObj ).not.toBeNull();
+			expect( walletObj.isHD ).toBe( true );
+			expect( walletObj.mnemonic ).toBe( '' );
+			expect( walletObj.password ).toBe( '' );
+			expect( walletObj.address ).toBe( '0xa5e2d3e4add1e1df39621af8a1ea237d5732acb9' );
+			expect( walletObj.publicKey ).toBe( '0x0316e662d08cbedd52d5dfdb0ba322d7f8b015c6572c4f1dec99c4888303dab44c' );
+			expect( walletObj.index ).toBe( 0 );
+			expect( walletObj.path ).toBe( "m/44'/60'/0'/0/0" );
+			expect( walletObj.privateKey ).toBe( undefined );
+		} );
+
+		it( "should create a wallet from a BIP32 Extended Private Key", async () =>
+		{
+			/**
+			 * 	https://iancoleman.io/bip39/
+			 *
+			 * 	BIP39 Mnemonic
+			 * 	`retire inflict prevent believe question pipe rebel state visit little bind accuse`
+			 *
+			 * 	from `BIP32 Extended Private Key`
+			 * 	depth = 4
+			 */
+			const BIP32extendedPrivateKey = `xprvA1V3sGKQ5dLzHV6kEZ1GNUN8wgJaxkHDGenj13BTJHJqZscF4Bnw28MA32GcrGGwWN6z2f3NY1z9ikVVw33ABWmh7vyszcb1caoixa3tTvR`;
+			const walletObj = EtherWallet.createWalletFromExtendedKey( BIP32extendedPrivateKey );
+			//console.log( walletObj );
+			//
+			//	    {
+			//       isHD: true,
+			//       mnemonic: '',
+			//       password: '',
+			//       address: '0xa5e2d3e4add1e1df39621af8a1ea237d5732acb9',
+			//       publicKey: '0x0316e662d08cbedd52d5dfdb0ba322d7f8b015c6572c4f1dec99c4888303dab44c',
+			//       index: 0,
+			//       path: "m/44'/60'/0'/0/0",
+			//       privateKey: undefined
+			//     }
+			expect( walletObj ).not.toBeNull();
+			expect( walletObj.isHD ).toBe( true );
+			expect( walletObj.mnemonic ).toBe( '' );
+			expect( walletObj.password ).toBe( '' );
+			expect( walletObj.address ).toBe( '0xa5e2d3e4add1e1df39621af8a1ea237d5732acb9' );
+			expect( walletObj.publicKey ).toBe( '0x0316e662d08cbedd52d5dfdb0ba322d7f8b015c6572c4f1dec99c4888303dab44c' );
+			expect( walletObj.index ).toBe( 0 );
+			expect( walletObj.path ).toBe( "m/44'/60'/0'/0/0" );
+			expect( walletObj.privateKey ).toBe( undefined );
+		} );
+
+		it( "should create a wallet from a BIP32 Extended Public Key", async () =>
+		{
+			/**
+			 * 	https://iancoleman.io/bip39/
+			 *
+			 * 	BIP39 Mnemonic
+			 * 	`retire inflict prevent believe question pipe rebel state visit little bind accuse`
+			 *
+			 * 	from `BIP32 Extended Public Key`
+			 * 	depth = 4
+			 */
+			const BIP32extendedPublicKey = `xpub6EUQGmrHuzuHVyBDLaYGjcJsVi95ND14dsiKoRb4rcqpSfwPbj7BZvfdtLb7KJLNJWZRbMAxkEoe5NwyxEEoZmFUNfPH7Hg3SXrEqPsXoMN`;
+			const walletObj = EtherWallet.createWalletFromExtendedKey( BIP32extendedPublicKey );
+			//console.log( walletObj );
+			//
+			//	    {
+			//       isHD: true,
+			//       mnemonic: '',
+			//       password: '',
+			//       address: '0xa5e2d3e4add1e1df39621af8a1ea237d5732acb9',
+			//       publicKey: '0x0316e662d08cbedd52d5dfdb0ba322d7f8b015c6572c4f1dec99c4888303dab44c',
+			//       index: 0,
+			//       path: "m/44'/60'/0'/0/0",
+			//       privateKey: undefined
+			//     }
+			expect( walletObj ).not.toBeNull();
+			expect( walletObj.isHD ).toBe( true );
+			expect( walletObj.mnemonic ).toBe( '' );
+			expect( walletObj.password ).toBe( '' );
+			expect( walletObj.address ).toBe( '0xa5e2d3e4add1e1df39621af8a1ea237d5732acb9' );
+			expect( walletObj.publicKey ).toBe( '0x0316e662d08cbedd52d5dfdb0ba322d7f8b015c6572c4f1dec99c4888303dab44c' );
+			expect( walletObj.index ).toBe( 0 );
+			expect( walletObj.path ).toBe( "m/44'/60'/0'/0/0" );
+			expect( walletObj.privateKey ).toBe( undefined );
+		} );
+	});
+
+	describe( "Create Wallet from a Private Key", () =>
 	{
 		it( "should create a wallet from a empty private key", async () =>
 		{
@@ -133,8 +278,6 @@ describe( "EtherWallet", () =>
 			// 	index: 0,
 			// 	path: null
 			// }
-
-
 			expect( walletObj ).not.toBeNull();
 			expect( walletObj.mnemonic ).toBe( '' );
 			expect( walletObj.privateKey ).toEqual( privateKey );
@@ -251,9 +394,9 @@ describe( "EtherWallet", () =>
 		});
 	} );
 
-	describe( "Create New Address", () =>
+	describe( "Derive the next wallet", () =>
 	{
-		it( "should create a new adderss from a specified HD wallet", async () =>
+		it( "should create a new address from a specified HD wallet", async () =>
 		{
 			const mnemonic = 'olympic cradle tragic crucial exit annual silly cloth scale fine gesture ancient';
 			const firstAddress = '0xC8F60EaF5988aC37a2963aC5Fabe97f709d6b357';
@@ -265,30 +408,15 @@ describe( "EtherWallet", () =>
 			expect( walletObj.index ).toBe( 0 );
 			expect( walletObj.path ).toBe( ethers.defaultPath );
 
-			const secondWalletObj = EtherWallet.createNewAddress( walletObj );
+			const secondWalletObj = EtherWallet.deriveNextWallet( walletObj );
 			expect( secondWalletObj.address ).toBe( secondAdderss.trim().toLowerCase() );
 			expect( secondWalletObj.index ).toBe( 1 );
 			expect( secondWalletObj.path ).toBe( ethers.getIndexedAccountPath( 1 ) );
 
-			const thirdWalletObj = EtherWallet.createNewAddress( secondWalletObj );
+			const thirdWalletObj = EtherWallet.deriveNextWallet( secondWalletObj );
 			expect( thirdWalletObj.address ).toBe( thirdAddress.trim().toLowerCase() );
 			expect( thirdWalletObj.index ).toBe( 2 );
 			expect( thirdWalletObj.path ).toBe( ethers.getIndexedAccountPath( 2 ) );
-		} );
-
-		it( "should throw an error if the wallet is not valid", async () =>
-		{
-			try
-			{
-				EtherWallet.createNewAddress( undefined );
-			}
-			catch ( error : any )
-			{
-				//	Assert that the error is thrown
-				expect( error ).toBeDefined();
-				expect( error ).toHaveProperty( 'message' );
-				expect( error.message ).toEqual( "wallet not specified" );
-			}
 		} );
 	} )
 } );

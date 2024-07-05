@@ -6,6 +6,19 @@ import {
 import { TWalletBaseItem } from "../models/TWallet";
 import _ from "lodash";
 
+
+/**
+ * 	Non-hardened Derivation
+ * 	0          -> 0x7FFFFFFF
+ *
+ * 	Hardened Derivation
+ * 	0x7FFFFFFF -> 0xFFFFFFFF
+ */
+export const NonHardenedEnd = 0x7FFFFFFF;
+export const HardenedStart = 0x80000000;
+
+
+
 /**
  * 	@class
  */
@@ -230,19 +243,50 @@ export class EtherWallet
 	}
 
 	/**
-	 * 	https://iancoleman.io/bip39/
-	 * 	扩展私钥不是钱包的私钥，是助记词
-	 * 	m/44'/60'/0'/0
-	 * 	Derivation Path  BIP44
+	 * 	Create a wallet from an Extended Key
 	 *
-	 * 	Create a wallet from an extended private key.
-	 *	supported BIP32 Root Key | Account Extended Private Key | BIP32 Extended Private Key
-	 *	@param {*} extendedKey	- BIP32 Extended Private Key
+	 * 	@remark
+	 * 	https://iancoleman.io/bip39/
+	 *
+	 *	The BIP44 hierarchical path is a standardized method for deriving cryptocurrency addresses from a single master seed.
+	 *	It is used by many popular cryptocurrency wallets, including Bitcoin, Ethereum, and LiteCoin.
+	 *	The path is defined as follows:
+	 *	`m/purpose'/coin_type'/account'/change/address_index`
+	 *
+	 *       for Ethereum wallet:
+	 *       `m/44'/60'/0'/0/0`
+	 *
+	 *       m
+	 *       - is the root node of the path.
+	 *
+	 *       purpose
+	 *       - is a constant value that indicates the purpose of the path.
+	 *         For BIP44, the purpose value is always 44'.
+	 *
+	 *       coin_type
+	 *       - is a code that identifies the cryptocurrency.
+	 *         For Bitcoin, the coin_type value is 0'.
+	 *         For Ethereum, the coin_type value is 60'.
+	 *
+	 *       account
+	 *       - is an index that identifies a specific account within a wallet.
+	 *         The account index is typically a zero-based integer.
+	 *
+	 *       change
+	 *       - is a boolean flag that indicates whether the address is a change address or an external address.
+	 *         Change addresses are used for receiving change from transactions, while external addresses are used for receiving payments.
+	 *         The change flag is typically a zero or one.
+	 *
+	 *       address_index
+	 *       - is an index that identifies a specific address within an account.
+	 *         The address index is typically a zero-based integer.
+	 *
+	 *	@param extendedKey	{string} BIP32 Root Key | Account Extended Private Key | Account Extended Public Key | BIP32 Extended Private Key | BIP32 Extended Public Key
 	 *	@returns {TWalletBaseItem}
 	 */
 	public static createWalletFromExtendedKey( extendedKey : string ) : TWalletBaseItem
 	{
-		if ( !extendedKey )
+		if ( ! extendedKey || ! _.isString( extendedKey ) )
 		{
 			throw new Error( 'EtherWallet.createWalletFromExtendedKey :: no extended private key specified.' );
 		}
@@ -253,12 +297,18 @@ export class EtherWallet
 		wallet.mnemonic = '';
 		wallet.password = '';
 
+		//	...
 		let deriveWallet;
+
+		/**
+		 * 	The depth of this wallet,
+		 * 	which is the number of components in its path.
+		 */
 		switch ( walletObj.depth )
 		{
 			case 0:
-				//	Mnemonic
-				//	给出衍生路径，补齐五层衍生路径为 "m/44'/60'/0'/0/0"
+				//	defaultPath
+				//	`m/44'/60'/0'/0/0`
 				deriveWallet = walletObj.derivePath( ethers.defaultPath );
 				wallet = {
 					...wallet,
@@ -271,9 +321,14 @@ export class EtherWallet
 				break;
 
 			case 3:
-				//	m/44'/60'/0'/0
-				//	给出衍生路径，补齐五层衍生路径为 "m/44'/60'/0'/0/0"，补的就是最后的 "/0/0"
-				deriveWallet = walletObj.derivePath( 'm/0/0' );
+				//
+				//	for `Account Extended Private Key` or `Account Extended Public Key`
+				//
+				//	current path: `m/44'/60'/0'`
+				//	new path(missing path): `0/0`
+				//	combined path: `${ current path }/${ new path }`
+				//
+				deriveWallet = walletObj.derivePath( '0/0' );
 				wallet = {
 					...wallet,
 					address : deriveWallet.address,
@@ -284,8 +339,14 @@ export class EtherWallet
 				};
 				break;
 			case 4:
-				//	给出衍生路径，补齐五层衍生路径为 "m/44'/60'/0'/0/0"，补的就是最后的 "/0"
-				deriveWallet = walletObj.derivePath( 'm/0' );
+				//
+				//	for `BIP32 Extended Private Key` and `BIP32 Extended Public Key`
+				//
+				//	current path: `m/44'/60'/0'/0`
+				//	new path(missing path): `0`
+				//	combined path: `${ current path }/${ new path }`
+				//
+				deriveWallet = walletObj.derivePath( '0' );
 				wallet = {
 					...wallet,
 					address : deriveWallet.address,
@@ -296,7 +357,7 @@ export class EtherWallet
 				};
 				break
 			default:
-				throw new Error( 'EtherWallet.createWalletFromExtendedKey :: Unsupported type of extended private key' );
+				throw new Error( 'EtherWallet.createWalletFromExtendedKey :: Unsupported type of extended key' );
 		}
 
 		return this.decorateResult( wallet );
@@ -305,6 +366,7 @@ export class EtherWallet
 
 	/**
 	 *	Create a wallet from a wallet private key
+	 *
 	 *	@param {*} privateKey
 	 *	@returns {TWalletBaseItem}
 	 */
@@ -396,6 +458,8 @@ export class EtherWallet
 	}
 
 	/**
+	 * 	check if the input value is a valid private key
+	 *
 	 *	@param privateKey	{any}
 	 *	@returns {boolean}
 	 */
@@ -405,6 +469,8 @@ export class EtherWallet
 	}
 
 	/**
+	 *	check if the input value is a valid public key
+	 *
 	 *	@param publicKey	{any}
 	 *	@returns {boolean}
 	 */
@@ -414,6 +480,8 @@ export class EtherWallet
 	}
 
 	/**
+	 * 	check if the input value is a valid hex string in lower case
+	 *
 	 *	@param input	{any}
 	 *	@returns {boolean}
 	 */
@@ -424,20 +492,82 @@ export class EtherWallet
 	}
 
 	/**
+	 * 	check if the input value is a valid Non-Hardened address index
+	 *
+	 *	@param addressIndex	{number}
+	 *	@returns {boolean}
+	 */
+	public static isValidNonHardenedAddressIndex( addressIndex : number ) : boolean
+	{
+		return _.isNumber( addressIndex ) && addressIndex >= 0 && addressIndex <= NonHardenedEnd;
+	}
+
+	/**
+	 * 	@deprecated
+	 *
 	 *	Generate a new address for the specified wallet
-	 *	@param wallet	{any}
+	 *	@param wallet	{TWalletBaseItem}
 	 *	@returns {TWalletBaseItem}
 	 */
-	public static createNewAddress( wallet : any ) : TWalletBaseItem
+	public static createNewAddress( wallet : TWalletBaseItem ) : TWalletBaseItem
+	{
+		return this.deriveNextWallet( wallet );
+	}
+
+	/**
+	 * 	derive the next wallet
+	 *
+	 * 	@param wallet		{TWalletBaseItem}
+	 * 	@returns {TWalletBaseItem}
+	 */
+	public static deriveNextWallet( wallet : TWalletBaseItem ) : TWalletBaseItem
 	{
 		if ( ! wallet )
 		{
-			throw new Error( 'wallet not specified' )
+			throw new Error( 'EtherWallet.createNewAddress :: invalid wallet' );
+		}
+		if ( ! wallet.mnemonic ||
+			! _.isString( wallet.mnemonic ) ||
+			_.isEmpty( wallet.mnemonic ) )
+		{
+			throw new Error( 'EtherWallet.createNewAddress :: invalid wallet.mnemonic' );
+		}
+		if ( ! this.isValidNonHardenedAddressIndex( wallet.index ) )
+		{
+			throw new Error( 'EtherWallet.createNewAddress :: invalid wallet.index' );
 		}
 
-		const mnemonicObj = ethers.Mnemonic.fromPhrase( wallet.mnemonic )
-		const nextPath = ethers.getIndexedAccountPath( wallet.index + 1 )
-		const walletObj = ethers.HDNodeWallet.fromMnemonic( mnemonicObj, nextPath )
+		//	...
+		return this.deriveNewWalletByAddressIndex( wallet, wallet.index + 1 );
+	}
+
+	/**
+	 * 	derive new wallet by address index
+	 *
+	 *	@param wallet		{TWalletBaseItem}
+	 *	@param addressIndex	{number}
+	 *	@returns {TWalletBaseItem}
+	 */
+	public static deriveNewWalletByAddressIndex( wallet : TWalletBaseItem, addressIndex : number ) : TWalletBaseItem
+	{
+		if ( ! wallet )
+		{
+			throw new Error( 'EtherWallet.deriveNewWalletByAddressIndex :: invalid wallet' );
+		}
+		if ( ! wallet.mnemonic ||
+			! _.isString( wallet.mnemonic ) ||
+			_.isEmpty( wallet.mnemonic ) )
+		{
+			throw new Error( 'EtherWallet.deriveNewWalletByAddressIndex :: invalid wallet.mnemonic' );
+		}
+		if ( ! this.isValidNonHardenedAddressIndex( addressIndex ) )
+		{
+			throw new Error( 'EtherWallet.deriveNewWalletByAddressIndex :: invalid addressIndex' );
+		}
+
+		const mnemonicObj = ethers.Mnemonic.fromPhrase( wallet.mnemonic );
+		const nextPath = ethers.getIndexedAccountPath( addressIndex );
+		const walletObj = ethers.HDNodeWallet.fromMnemonic( mnemonicObj, nextPath );
 
 		return this.decorateResult({
 			isHD : true,
