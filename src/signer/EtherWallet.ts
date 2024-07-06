@@ -1,7 +1,7 @@
 import {
 	ethers,
 	KeystoreAccount, EncryptOptions, ProgressCallback,
-	isKeystoreJson, decryptKeystoreJson, encryptKeystoreJson, isAddress, isHexString
+	isKeystoreJson, decryptKeystoreJson, encryptKeystoreJson, isAddress, isHexString, keccak256, toUtf8Bytes
 } from "ethers";
 import { TWalletBaseItem } from "../models/TWallet";
 import _ from "lodash";
@@ -400,8 +400,8 @@ export class EtherWallet
 		//		"address":"0x7b65aBA47A1575879A1f28734e1386bf47D01700"
 		//	}
 		//
-		const walletObj = new ethers.Wallet( privateKeyObj )
-		//console.log( `🧲`, JSON.stringify( walletObj ) );
+		const walletObj = new ethers.Wallet( privateKeyObj );
+		//console.log( `walletObj :`, walletObj );
 
 		return this.decorateResult({
 			isHD : false,
@@ -410,6 +410,49 @@ export class EtherWallet
 			address : walletObj.address,
 			publicKey : ethers.SigningKey.computePublicKey( walletObj.privateKey, true ),
 			privateKey : walletObj.privateKey,
+			index : 0,	//	walletObj.index,
+			path : null,	//	walletObj.path
+		});
+	}
+
+	/**
+	 * 	create a wallet from a seed string
+	 *
+	 *	@param seedString	{string}
+	 *	@returns {TWalletBaseItem}
+	 */
+	public static createWalletFromSeedString( seedString : string ) : TWalletBaseItem
+	{
+		if ( ! seedString || ! _.isString( seedString ) || _.isEmpty( seedString ) )
+		{
+			throw new Error( 'EtherWallet.createWalletFromSeedString :: invalid seedString' )
+		}
+
+		//	Hash the seedString into a fixed-length seed
+		const seed = keccak256( toUtf8Bytes( seedString ) );
+		const walletObj = ethers.HDNodeWallet.fromSeed( seed );
+		//console.log( `walletObj :`, walletObj );
+		//
+		//	    walletObj : HDNodeWallet {
+		//       provider: null,
+		//       address: '0xE5E6c11456FFe01B81f9d270a9d6af4Db18C86C1',
+		//       publicKey: '0x035f72f81328a6f20be8626a3c5397206d66d768bc1d24bd00953e7c8aaeeddbc8',
+		//       fingerprint: '0x382d41c9',
+		//       parentFingerprint: '0x00000000',
+		//       mnemonic: null,
+		//       chainCode: '0x18a675124e9dd40efb2753645a48a5c23b39bc07b6449241b0fa0dcb281dc4eb',
+		//       path: 'm',
+		//       index: 0,
+		//       depth: 0
+		//     }
+		//
+		return this.decorateResult({
+			isHD : false,
+			mnemonic : ``,
+			password : ``,
+			address : walletObj.address,
+			publicKey : walletObj.publicKey,
+			privateKey : ``,
 			index : 0,	//	walletObj.index,
 			path : null,	//	walletObj.path
 		});

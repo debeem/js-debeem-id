@@ -259,7 +259,35 @@ describe( "EtherWallet", () =>
 			expect( walletObj.path ).toBe( null );
 		} );
 
-		it( "should create a wallet from a specified private key", async () =>
+		it( "should create a wallet from a private key", async () =>
+		{
+			// Create a wallet from the specified private key
+			const privateKey = "0xf8ba731e3d09ce93ee6256d7393e993be01cd84de044798372c0d1a8ad9b952a";
+			const publicKey = "0x03ed2098910ab9068abd54e1562eb9dee3cb2d9fc1426dfe91541970a89b5aa622";
+			const address = "0xC8F60EaF5988aC37a2963aC5Fabe97f709d6b357";
+
+			const walletObj = EtherWallet.createWalletFromPrivateKey( privateKey );
+			// console.log( walletObj );
+			// {
+			// 	isHD: false,
+			// 		mnemonic: '',
+			// 	password: '',
+			// 	address: '0xC8F60EaF5988aC37a2963aC5Fabe97f709d6b357',
+			// 	publicKey: '0x03ed2098910ab9068abd54e1562eb9dee3cb2d9fc1426dfe91541970a89b5aa622',
+			// 	privateKey: '0xf8ba731e3d09ce93ee6256d7393e993be01cd84de044798372c0d1a8ad9b952a',
+			// 	index: 0,
+			// 	path: null
+			// }
+			expect( walletObj ).not.toBeNull();
+			expect( walletObj.mnemonic ).toBe( '' );
+			expect( walletObj.privateKey ).toEqual( privateKey );
+			expect( walletObj.publicKey ).toEqual( publicKey );
+			expect( walletObj.address ).toEqual( address.trim().toLowerCase() );
+			expect( walletObj.index ).toBe( 0 );
+			expect( walletObj.path ).toBe( null );
+		} );
+
+		it( "should create a HD wallet from a private key", async () =>
 		{
 			// Create a wallet from the specified private key
 			const privateKey = "0xf8ba731e3d09ce93ee6256d7393e993be01cd84de044798372c0d1a8ad9b952a";
@@ -305,6 +333,37 @@ describe( "EtherWallet", () =>
 			}
 		} );
 	} );
+
+	describe( "Create Wallet from a seed string", () =>
+	{
+		it ( "should create a wallet from a seed string", async () =>
+		{
+			//
+			//	step 1: create a new wallet from a random private key
+			//
+			const seedString = `xxf8ba731e3d09ce93ee6256d7393e993be01cd84de044798372c0d1a8ad9b952a`;
+			const walletObj = EtherWallet.createWalletFromSeedString( seedString );
+			//console.log( `walletObj :`, walletObj );
+			//	    walletObj : {
+			//       isHD: false,
+			//       mnemonic: '',
+			//       password: '',
+			//       address: '0xe5e6c11456ffe01b81f9d270a9d6af4db18c86c1',
+			//       publicKey: '0x035f72f81328a6f20be8626a3c5397206d66d768bc1d24bd00953e7c8aaeeddbc8',
+			//       privateKey: '',
+			//       index: 0,
+			//       path: null
+			//     }
+			expect( walletObj ).not.toBeNull();
+			expect( walletObj.mnemonic ).toBe( '' );
+			expect( walletObj.privateKey ).toBe( '' );
+			expect( walletObj.publicKey ).toBe( '0x035f72f81328a6f20be8626a3c5397206d66d768bc1d24bd00953e7c8aaeeddbc8' );
+			expect( walletObj.address ).toBe( `0xe5e6c11456ffe01b81f9d270a9d6af4db18c86c1` );
+			expect( walletObj.index ).toBe( 0 );
+			expect( walletObj.path ).toBe( null );
+
+		});
+	});
 
 	describe( "Create Wallet from Keystore", () =>
 	{
