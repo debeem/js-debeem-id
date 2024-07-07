@@ -537,10 +537,10 @@ export class EtherWallet
 	/**
 	 * 	check if the input value is a valid Non-Hardened address index
 	 *
-	 *	@param addressIndex	{number}
+	 *	@param addressIndex	{any}
 	 *	@returns {boolean}
 	 */
-	public static isValidNonHardenedAddressIndex( addressIndex : number ) : boolean
+	public static isValidNonHardenedAddressIndex( addressIndex : any ) : boolean
 	{
 		return _.isNumber( addressIndex ) && addressIndex >= 0 && addressIndex <= NonHardenedEnd;
 	}

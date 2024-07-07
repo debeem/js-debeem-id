@@ -459,16 +459,21 @@ describe( "EtherWallet", () =>
 		{
 			const mnemonic = 'olympic cradle tragic crucial exit annual silly cloth scale fine gesture ancient';
 			const firstAddress = '0xC8F60EaF5988aC37a2963aC5Fabe97f709d6b357';
-			const secondAdderss = '0x75BaAEc1C767A6A6F076dEEeA665F8642973dafA';
+			const secondAddress = '0x75BaAEc1C767A6A6F076dEEeA665F8642973dafA';
 			const thirdAddress = '0xE05eCB996dA9D59315d569D65C93Af68bA9AA4a5';
 
+			const businessAddressIndex : number | undefined = 1111;
+			const isValidNonHardenedAddressIndex = EtherWallet.isValidNonHardenedAddressIndex( businessAddressIndex );
+			expect( isValidNonHardenedAddressIndex ).toBeTruthy();
+
+			//	...
 			const walletObj = EtherWallet.createWalletFromMnemonic( mnemonic );
 			expect( walletObj.address ).toBe( firstAddress.trim().toLowerCase() );
 			expect( walletObj.index ).toBe( 0 );
 			expect( walletObj.path ).toBe( ethers.defaultPath );
 
 			const secondWalletObj = EtherWallet.deriveNextWallet( walletObj );
-			expect( secondWalletObj.address ).toBe( secondAdderss.trim().toLowerCase() );
+			expect( secondWalletObj.address ).toBe( secondAddress.trim().toLowerCase() );
 			expect( secondWalletObj.index ).toBe( 1 );
 			expect( secondWalletObj.path ).toBe( ethers.getIndexedAccountPath( 1 ) );
 
