@@ -1,6 +1,7 @@
 import { verifyMessage } from "ethers";
 import { Web3Encoder } from "./Web3Encoder";
 import _ from "lodash";
+import { EtherWallet } from "./EtherWallet";
 
 /**
  * 	@class Web3Validator
@@ -20,7 +21,7 @@ export class Web3Validator
 		{
 			try
 			{
-				if ( ! _.isString( signerWalletAddress ) || _.isEmpty( signerWalletAddress ) )
+				if ( ! EtherWallet.isValidAddress( signerWalletAddress ) )
 				{
 					return reject( `Web3Validator.validateObject :: invalid signerWalletAddress` );
 				}
@@ -58,7 +59,7 @@ export class Web3Validator
 		{
 			try
 			{
-				if ( ! _.isString( signerWalletAddress ) || _.isEmpty( signerWalletAddress ) )
+				if ( ! EtherWallet.isValidAddress( signerWalletAddress ) )
 				{
 					return reject( `Web3Validator.validateMessage :: invalid signerWalletAddress` );
 				}
