@@ -1,5 +1,5 @@
 import { describe, expect } from '@jest/globals';
-import { ValidateSerializable } from "../../../src/validators/ValidateSerializable";
+import { ValidateSerializable } from "../../../src";
 
 
 /**

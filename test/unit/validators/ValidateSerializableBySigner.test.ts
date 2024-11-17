@@ -1,5 +1,4 @@
 import { describe, expect } from '@jest/globals';
-import { ValidateSerializable } from "../../../src/validators/ValidateSerializable";
 import { EtherWallet, TWalletBaseItem, Web3Signer } from "../../../src";
 import { ethers } from "ethers";
 
