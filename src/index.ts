@@ -7,3 +7,5 @@ export * from "./signer/Web3Encoder";
 export * from "./signer/Web3Signer";
 
 export * from "./signer/Web3Validator";
+
+export * from "./validators/ValidateSerializable";

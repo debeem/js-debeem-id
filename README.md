@@ -1,6 +1,49 @@
 # debeem-id
-`debeem-id` is a simple and easy-to-use software development toolkit for Web3. 
-Based on Ethereum wallet technology, including signing data, signature verifying and identity authenticating.
+The `debeem-id` is a simple and easy-to-use Web3 software development toolkit developed by the `DeBeem` open-source organization.
+
+Based on Ethereum wallet technology, `debeem-id` is an infrastructure component of the `DeBeem` ecosystem, offering features such as strict validation of data to be signed, data signing, signature verification, and identity authentication.
+
+
+## Table of contents
+- [Key features](#key-features)
+- [How it works](#how-it-works)
+- [Create a signer](#create-a-signer)
+- [Sign Data](#sign-data)
+- [Validate Signature](#validate-signature)
+- [Object that cannot be signed](#object-that-cannot-be-signed)
+
+
+## Key features
+
+- **EtherWallet** 
+
+    Core functionality component of the Ethereum wallet, including wallet creation, import, recovery, wallet address validation, wallet derivation, and other features.
+
+
+- **Web3Digester** 
+
+    Provides hash digest and result format validation functionality for a JSON Object.
+
+
+- **Web3Encoder** 
+
+    Provides encoding and decoding functionality for a JSON Object.
+
+
+- **Web3Signer** 
+
+    Provides signing and result format validation functionality for a JSON Object.
+
+
+- **Web3Validator** 
+
+    Used to verify if the signature of a JSON Object is correct.
+
+
+- **ValidateSerializable** 
+
+    Used to strictly validate whether a JSON Object can be signed.
+
 
 ## How it works
 - Sign the data with the wallet's private key, and you will get a signature string.
@@ -9,9 +52,10 @@ Based on Ethereum wallet technology, including signing data, signature verifying
 
 
 ## Create a signer
-The signer is based on the wallet, so creating a signer is creating a wallet. Then, we can sign the data with the `wallet’s private key`.
 
-1. Create an HD wallet automatically
+The signer is based on the wallet, so creating a signer is equivalent to creating a wallet. Subsequently, we can sign the data using the `wallet's private key`.
+
+1. Create a random HD wallet object
 ```typescript
 const walletObj = EtherWallet.createWalletFromMnemonic();
 ```
@@ -29,7 +73,7 @@ const walletObj = EtherWallet.createWalletFromMnemonic();
 }
 ```
 
-2. Create a wallet with a user-specified mnemonic phrase
+2. Create a wallet object using a user-specified mnemonic phrase
 ```typescript
 const mnemonic = 'olympic cradle tragic crucial exit annual silly cloth scale fine gesture ancient';
 const walletObj = EtherWallet.createWalletFromMnemonic( mnemonic );
@@ -86,8 +130,8 @@ let toBeSignedObject = {
 	name : `Sam`,
 	avatar : 'https://avatars.githubusercontent.com/u/142800322?v=4',
 	remark : 'no remark',
-	createdAt: new Date(),
-	updatedAt: new Date()
+	createdAt: JSON.stringify( new Date() ),
+	updatedAt: JSON.stringify( new Date() )
 };
 //      .sig, .createdAt, .updatedAt are ignored by default 
 const exceptedKeys : Array<string> = [ 'remark' ];
@@ -120,3 +164,18 @@ const valid = await Web3Validator.validateObject( walletAddress, toBeSignedObjec
 //      valid
 true
 ```
+
+## Object that cannot be signed
+
+Objects whose type of the object itself or any of its sub-elements belong to the following types cannot be signed.
+
+- undefined
+- function
+- symbol
+- Map
+- Set
+- BigInt
+- Date
+- RegExp
+
+

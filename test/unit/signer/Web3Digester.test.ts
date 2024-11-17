@@ -40,10 +40,10 @@ describe( "Digester", () =>
 				name : `Sam`,
 				avatar : 'https://avatars.githubusercontent.com/u/142800322?v=4',
 				remark : 'no remark',
-				timestamp : new Date().getTime(),
+				timestamp : Date.now(),
 				hash : `will be ignored`,
-				createdAt: new Date(),
-				updatedAt: new Date()
+				createdAt: JSON.stringify( new Date() ),
+				updatedAt: JSON.stringify( new Date() )
 			};
 
 			//	hash

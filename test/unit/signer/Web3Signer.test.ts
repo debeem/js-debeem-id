@@ -48,8 +48,8 @@ describe( "Signer", () =>
 				name : `Sam`,
 				avatar : 'https://avatars.githubusercontent.com/u/142800322?v=4',
 				remark : 'no remark',
-				createdAt: new Date(),
-				updatedAt: new Date()
+				createdAt: JSON.stringify( new Date() ),
+				updatedAt: JSON.stringify( new Date() )
 			};
 			toBeSignedObject.sig = await Web3Signer.signObject( walletObj.privateKey, toBeSignedObject );
 			expect( toBeSignedObject.sig ).toBeDefined();
@@ -97,8 +97,8 @@ describe( "Signer", () =>
 				name : `Sam`,
 				avatar : 'https://avatars.githubusercontent.com/u/142800322?v=4',
 				remark : 'no remark',
-				createdAt: new Date(),
-				updatedAt: new Date()
+				createdAt: JSON.stringify( new Date() ),
+				updatedAt: JSON.stringify( new Date() )
 			};
 			const exceptedKeys : Array<string> = [ 'remark' ];
 

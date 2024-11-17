@@ -2,6 +2,7 @@ import { ethers, isHexString, SigningKey } from "ethers"
 import { Web3Encoder } from "./Web3Encoder";
 import { EtherWallet } from "./EtherWallet";
 import _ from "lodash";
+import { ValidateSerializable } from "../validators/ValidateSerializable";
 
 
 /**
@@ -32,6 +33,12 @@ export class Web3Signer
 				if ( ! EtherWallet.isValidAddress( obj.wallet ) )
 				{
 					return reject( `Web3Signer.signObject :: invalid obj.wallet` );
+				}
+
+				const errorValidateSerializable : string | null = new ValidateSerializable().validate( obj );
+				if ( null !== errorValidateSerializable )
+				{
+					return reject( `Web3Signer.signObject :: ${ errorValidateSerializable }` );
 				}
 
 				const message : string = await Web3Encoder.encode( obj, exceptedKeys );
