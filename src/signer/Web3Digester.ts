@@ -1,6 +1,6 @@
 import { isHexString, keccak256 } from "ethers";
 import { Web3Encoder } from "./Web3Encoder";
-import { EtherWallet } from "./EtherWallet";
+import { EtherWallet } from "../wallet/EtherWallet";
 import _ from "lodash";
 
 /**

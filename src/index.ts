@@ -1,6 +1,16 @@
 export * from "./models/TWallet";
 
-export * from "./signer/EtherWallet";
+
+/**
+ * 	wallet
+ */
+export * from "./wallet/EtherWallet";
+export * from "./wallet/EtherAddress";
+
+
+/**
+ * 	signer
+ */
 export * from "./signer/Web3Digester";
 
 export * from "./signer/Web3Encoder";
